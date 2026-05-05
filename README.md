@@ -1,160 +1,199 @@
 <div align="center">
 
-# Real-Time AI Traffic Management System
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=200&section=header&text=AI%20Traffic%20Management&fontSize=42&fontColor=ffffff&fontAlignY=38&desc=Real-Time%20Adaptive%20Signal%20Control%20%7C%20YOLOv8%20%2B%20React%20%2B%20Flask&descAlignY=58&descSize=16" width="100%"/>
 
-### Adaptive Signal Control using Computer Vision and Deep Learning
+<br/>
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org)
 [![YOLOv8](https://img.shields.io/badge/YOLOv8s-Ultralytics-00FFFF?style=for-the-badge&logo=yolo&logoColor=black)](https://docs.ultralytics.com)
 [![Flask](https://img.shields.io/badge/Flask-3.1-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
 [![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/Shubhamx18/Real-Time-AI-Traffic-Management-System?style=for-the-badge&color=fbbf24)](https://github.com/Shubhamx18/Real-Time-AI-Traffic-Management-System/stargazers)
 
-**An intelligent, real-time traffic signal management system that uses AI-powered vehicle detection to dynamically optimize intersection signal timing — reducing congestion and improving urban traffic flow.**
+<br/>
 
-[Overview](#overview) · [Features](#features) · [Architecture](#architecture) · [Installation](#installation) · [Usage](#usage) · [API Reference](#api-reference) · [Performance](#performance)
+> **Replace fixed-timer intersections with an AI-driven adaptive system.**
+> YOLOv8s detects vehicles across 4 live camera feeds, calculates queue lengths,
+> and dynamically assigns green time — all visible on a real-time browser dashboard.
 
----
+<br/>
+
+[![Python](https://img.shields.io/badge/Python-47.1%25-3776AB?style=flat-square&logo=python&logoColor=white)]()
+[![JavaScript](https://img.shields.io/badge/JavaScript-38.0%25-F7DF1E?style=flat-square&logo=javascript&logoColor=black)]()
+[![CSS](https://img.shields.io/badge/CSS-12.5%25-1572B6?style=flat-square&logo=css3&logoColor=white)]()
+[![Dockerfile](https://img.shields.io/badge/Dockerfile-1.4%25-2496ED?style=flat-square&logo=docker&logoColor=white)]()
 
 </div>
 
+<br/>
+
+---
+
+## Navigation
+
+| | |
+|---|---|
+| [Overview](#-overview) | What the system does and why |
+| [Features](#-features) | Detection, signals, dashboard, settings |
+| [Architecture](#-architecture) | System diagram and data flow |
+| [Tech Stack](#-tech-stack) | All libraries and frameworks |
+| [Project Structure](#-project-structure) | File tree with annotations |
+| [Installation](#-installation) | Step-by-step setup guide |
+| [Usage](#-usage) | How to run an analysis session |
+| [How It Works](#-how-it-works) | Algorithm and pipeline details |
+| [Configuration](#-configuration) | All tunable parameters |
+| [API Reference](#-api-reference) | All REST endpoints |
+| [Performance](#-performance) | FPS, latency, model comparison |
+| [Docker](#-docker-deployment) | Container deployment |
+| [Contributing](#-contributing) | How to submit changes |
+
+---
+
 ## Overview
 
-Traditional traffic signals operate on fixed timers, completely blind to real-time road conditions. This system replaces that outdated model with an AI-powered adaptive approach that responds dynamically to live traffic data.
+Traditional traffic lights run on fixed timers — they cannot react to an empty road or a backed-up queue. This system changes that.
 
-**How it works:**
+```
+Upload 4 videos  →  YOLOv8s detects vehicles  →  Queue analysis per direction
+      →  Adaptive green time assigned  →  Live dashboard updates in real time
+```
 
-1. Upload 4 intersection videos (North, South, East, West directions)
-2. YOLOv8s detects and tracks every vehicle in real time
-3. Queue analysis determines which direction has the most congestion
-4. Signal timing is dynamically optimized — busier roads get longer green windows
-5. A professional dashboard displays live feeds, analytics, and AI-generated insights
-
-The result: reduced wait times, lower congestion, and smarter intersections.
+The busiest approach always gets priority. Signal duration scales with congestion. Every decision is visible on the dashboard the moment it happens.
 
 ---
 
 ## Features
 
-### AI Vehicle Detection
+<table>
+<tr>
+<td width="50%" valign="top">
 
-- **YOLOv8s** deep learning model for fast, accurate detection
-- Recognizes cars, trucks, buses, motorcycles, and bicycles
-- Processes all 4 directions simultaneously every frame
-- Real-time bounding box tracking with centroid-based association
+### AI Vehicle Detection
+- YOLOv8s — fast, accurate, 22 MB
+- 5 classes: car · truck · bus · motorcycle · bicycle
+- All 4 directions processed simultaneously
+- Centroid-based multi-object tracking
+
+</td>
+<td width="50%" valign="top">
 
 ### Adaptive Signal Control
+- Queue-based priority per direction
+- Green time: 10 s – 60 s, density-scaled
+- Automatic cycle: Green → Yellow → All-Red
+- Density bonus for heavily packed roads
 
-- **Queue-based priority** — the direction with the most vehicles gets green first
-- **Dynamic green time** — ranges from 10s to 60s based on vehicle density and queue length
-- **Density-aware timing** — congested roads receive proportionally longer green signals
-- Automatic signal cycle sequencing: Green → Yellow → Red
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
 
-### AI Analytics Dashboard
+### Analytics Dashboard
+- Live density charts via Recharts
+- AI efficiency score per session
+- Queue breakdown: waiting vs. moving
+- Congestion alerts + recommendations
+- Full detection history with metrics
 
-- Live traffic density charts with real-time Recharts visualization
-- AI efficiency score calculated per intersection in real time
-- Queue analysis showing waiting vs. moving vehicles per direction
-- Direction comparison with side-by-side traffic load visualization
-- Smart AI recommendations for congestion alerts and optimization
-- Detection history tracking past sessions with detailed metrics
+</td>
+<td width="50%" valign="top">
 
-### Professional Control Center
+### Control Center
+- 4-panel live feeds with overlays
+- Signal timeline — current + upcoming phases
+- Status bar: FPS · progress · elapsed time
+- Dark UI designed for traffic operations
+- 100% browser-based, no native dependencies
 
-- 4-panel live intersection feeds with detection overlays
-- Signal timeline visualization showing current and upcoming phases
-- System status monitoring: FPS, progress, and elapsed time
-- Dark-themed, high-density UI designed for traffic control operations
-- Fully browser-based — no external windows or dependencies
-
-### Configurable Settings
-
-- Detection parameters: confidence, IoU threshold, image size
-- Signal timing: base green, max green, yellow and red clearance durations
-- Display settings: refresh rate, output quality, themes
-- Alert thresholds: congestion, low traffic, emergency triggers
+</td>
+</tr>
+</table>
 
 ---
 
 ## Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                      FRONTEND (React 18)                     │
-│                                                              │
-│   Live Control    Upload Footage    Analytics    Settings    │
-│        │                │               │            │       │
-│        └────────────────┴───────────────┴────────────┘       │
-│                              │ HTTP / REST                   │
-├──────────────────────────────┼───────────────────────────────┤
-│                      BACKEND (Flask)                         │
-│                              │                               │
-│         ┌────────────────────┴────────────────────┐          │
-│         │            API Layer (REST)              │          │
-│         │  /upload  /progress  /frame/<direction>  │          │
-│         │  /stop    /settings  /system/stats       │          │
-│         └────────────────────┬────────────────────┘          │
-│                              │                               │
-│         ┌────────────────────┴────────────────────┐          │
-│         │          Detection Subprocess            │          │
-│         │                                          │          │
-│         │   YOLOv8s Engine                         │          │
-│         │        └─> Centroid Tracker              │          │
-│         │                 └─> Queue Signal Timing  │          │
-│         └──────────────────────────────────────────┘          │
-│                                                              │
-│   detection_progress.json    (live metrics)                  │
-│   frames/{north,south,east,west}.jpg   (live feeds)          │
-│   analytics_history.json     (session history)               │
-└──────────────────────────────────────────────────────────────┘
+╔══════════════════════════════════════════════════════════════════════╗
+║                        FRONTEND  ·  React 18                        ║
+║                                                                      ║
+║   ┌─────────────┐  ┌──────────────┐  ┌────────────┐  ┌──────────┐  ║
+║   │ Live Control│  │Upload Footage│  │ Analytics  │  │ Settings │  ║
+║   └──────┬──────┘  └──────┬───────┘  └─────┬──────┘  └────┬─────┘  ║
+║          └────────────────┴────────────────┴───────────────┘        ║
+║                                    │  Axios  ·  HTTP/REST           ║
+╠════════════════════════════════════╪═════════════════════════════════╣
+║                        BACKEND  ·  Flask 3.1                        ║
+║                                    │                                 ║
+║          ┌─────────────────────────┴──────────────────────┐         ║
+║          │                  REST API Layer                 │         ║
+║          │  /upload  /progress  /frame/<dir>  /analytics  │         ║
+║          │  /stop    /settings  /system/stats  /health    │         ║
+║          └─────────────────────────┬──────────────────────┘         ║
+║                                    │  subprocess                     ║
+║          ┌─────────────────────────┴──────────────────────┐         ║
+║          │              Detection Engine                   │         ║
+║          │                                                 │         ║
+║          │  vehicle_tracker_ultra.py                       │         ║
+║          │    └─ YOLOv8s Inference                         │         ║
+║          │         └─ CentroidTracker  (IoU + distance)    │         ║
+║          │              └─ algo.py  (signal timing)        │         ║
+║          └─────────────────────────────────────────────────┘         ║
+║                                                                      ║
+║  detection_progress.json   ·   frames/{N,S,E,W}.jpg                 ║
+║  analytics_history.json    ·   settings.json                        ║
+╚══════════════════════════════════════════════════════════════════════╝
 ```
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology | Purpose |
-|---|---|---|
-| Frontend | React 18.3 | Single-page dashboard application |
-| Charts | Recharts 3.8 | Real-time traffic density visualization |
-| HTTP Client | Axios | API communication with the backend |
-| Backend | Flask 3.1 | REST API server with CORS support |
-| AI Model | YOLOv8s (Ultralytics) | Real-time vehicle detection |
-| Tracking | Custom CentroidTracker | Multi-object tracking with IoU matching |
-| Computer Vision | OpenCV 4.9+ | Frame processing, drawing, and I/O |
-| Computation | NumPy, SciPy | Matrix operations and cost assignment |
-| Containerization | Docker + Docker Compose | Optional deployment |
+| Layer | Technology | Version | Purpose |
+|---|---|---|---|
+| Frontend | React | 18.3 | Single-page dashboard |
+| Charts | Recharts | 3.8 | Live traffic density visualization |
+| HTTP Client | Axios | latest | REST API communication |
+| Backend | Flask | 3.1 | API server with CORS |
+| AI Model | YOLOv8s (Ultralytics) | latest | Vehicle detection |
+| Tracking | CentroidTracker (custom) | — | Multi-object tracking |
+| Computer Vision | OpenCV | 4.9+ | Frame I/O and annotation |
+| Computation | NumPy + SciPy | latest | Matrix ops and cost assignment |
+| Containers | Docker + Compose | — | Optional deployment |
 
 ---
 
 ## Project Structure
 
 ```
-AI-Based-Traffic-Management-SIH/
+Real-Time-AI-Traffic-Management-System/
+│
+├── docker-compose.yml                  # Two-service stack with health-check gating
 ├── README.md
-├── docker-compose.yml
 │
 ├── backend/
-│   ├── run_server.py              # Flask API server (main entry point)
-│   ├── run_detection.py           # Detection subprocess launcher
-│   ├── vehicle_tracker_ultra.py   # YOLOv8 + CentroidTracker engine
-│   ├── algo.py                    # Traffic signal optimization algorithm
-│   ├── requirements.txt           # Python dependencies
-│   ├── yolov8s.pt                 # YOLOv8s model weights (~22 MB)
-│   ├── frames/                    # Live detection frame output
-│   ├── uploads/                   # Uploaded video storage
-│   ├── detection_progress.json    # Real-time detection metrics
-│   ├── analytics_history.json     # Historical detection records
-│   └── settings.json              # User-configured settings
+│   ├── run_server.py                   # Flask entry point — starts API on :5000
+│   ├── run_detection.py                # Spawns detection subprocess
+│   ├── vehicle_tracker_ultra.py        # YOLOv8s inference + CentroidTracker
+│   ├── algo.py                         # Queue analysis + green time calculation
+│   ├── requirements.txt
+│   ├── yolov8s.pt                      # ~22 MB — auto-downloaded on first run
+│   │
+│   ├── frames/                         # JPEG output — one file per direction
+│   ├── uploads/                        # Uploaded videos (Docker volume mounted)
+│   ├── detection_progress.json         # Written every frame — polled by /progress
+│   ├── analytics_history.json          # Session history
+│   └── settings.json                   # Persisted user config
 │
 └── frontend/
     ├── package.json
-    ├── public/
-    │   └── index.html
+    ├── public/index.html
     └── src/
-        ├── App.js                 # Main dashboard application
-        ├── Settings.js            # Settings panel component
-        └── styles.css             # Complete UI styling
+        ├── App.js                      # All tabs, state, and polling logic
+        ├── Settings.js                 # Settings panel
+        └── styles.css                  # Full dark-theme UI
 ```
 
 ---
@@ -163,106 +202,75 @@ AI-Based-Traffic-Management-SIH/
 
 ### Prerequisites
 
-- Python 3.10+ with pip
-- Node.js 18+ with npm
-- Git
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)
+![Node](https://img.shields.io/badge/Node.js-18%2B-339933?style=flat-square&logo=node.js&logoColor=white)
+![Git](https://img.shields.io/badge/Git-required-F05032?style=flat-square&logo=git&logoColor=white)
 
-### Step 1 — Clone the Repository
+---
+
+**Step 1 — Clone**
 
 ```bash
 git clone https://github.com/Shubhamx18/Real-Time-AI-Traffic-Management-System.git
 cd Real-Time-AI-Traffic-Management-System
 ```
 
-### Step 2 — Set Up the Backend
+---
+
+**Step 2 — Backend**
 
 ```bash
 cd backend
-
-# Create a virtual environment
 python -m venv venv
 
-# Activate the environment
-# Windows:
-venv\Scripts\activate
-# macOS / Linux:
-source venv/bin/activate
+# Activate
+venv\Scripts\activate          # Windows
+source venv/bin/activate       # macOS / Linux
 
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-> The YOLOv8s model weights (~22 MB) will auto-download on first run.
+> `yolov8s.pt` (~22 MB) downloads automatically on first run.
 
-### Step 3 — Set Up the Frontend
+---
+
+**Step 3 — Frontend**
 
 ```bash
 cd ../frontend
 npm install
 ```
 
-### Step 4 — Start the System
+---
 
-**Terminal 1 — Backend**
+**Step 4 — Run**
 
-```bash
-cd backend
-source venv/bin/activate   # Windows: venv\Scripts\activate
-python run_server.py
-```
-
-> API server starts at `http://localhost:5000`
-
-**Terminal 2 — Frontend**
+| Terminal | Command | URL |
+|---|---|---|
+| 1 — Backend | `python run_server.py` | `http://localhost:5000` |
+| 2 — Frontend | `npm start` | `http://localhost:3000` |
 
 ```bash
-cd frontend
-npm start
-```
+# Terminal 1
+cd backend && source venv/bin/activate && python run_server.py
 
-> Dashboard opens at `http://localhost:3000`
+# Terminal 2
+cd frontend && npm start
+```
 
 ---
 
 ## Usage
 
-### 1. Upload Traffic Footage
+| Step | Action | Result |
+|---|---|---|
+| 1 | Open **Upload Footage** tab | Select 4 videos (N · S · E · W) |
+| 2 | Click **Start AI Analysis** | Engine initializes, switches to Live Control |
+| 3 | Watch **Live Control** | 4 annotated feeds + signal timeline update live |
+| 4 | Open **Analytics** tab | Density charts, efficiency scores, history |
+| 5 | Click **Stop Analytics** | Subprocess exits, session saved to `analytics_history.json` |
 
-Go to **Upload Footage** and select 4 video files — one per intersection direction: North, South, East, and West.
-
-> Use traffic surveillance footage where each video captures a single approach lane of the intersection.
-
-### 2. Start AI Analysis
-
-Click **Start AI Analysis**. The system will:
-
-- Switch automatically to the Live Control page
-- Display a loading indicator while the AI engine initializes
-- Begin showing live detection feeds with bounding boxes overlaid
-- Update the signal timing panel in real time
-
-### 3. Monitor Live Detection
-
-The Live Control dashboard shows:
-
-- 4 live feeds with real-time vehicle detection overlays
-- Green signal indicator — which direction currently has right-of-way
-- Queue counts — vehicles waiting at each approach
-- Signal cycle timeline — current and upcoming phases
-
-### 4. Review Analytics
-
-Switch to the **Analytics** tab to access:
-
-- Traffic density trends over time
-- AI efficiency scores and congestion indices
-- Queue analysis breakdowns per direction
-- Smart recommendations for signal optimization
-- Full detection history with per-session metrics
-
-### 5. Stop Analysis
-
-Click **Stop Analytics** at any time to gracefully terminate the detection process and save the session.
+> Use single-approach traffic camera footage per video. MP4 works well.
 
 ---
 
@@ -272,79 +280,84 @@ Click **Stop Analytics** at any time to gracefully terminate the detection proce
 
 ```
 Video Frame
-  → YOLOv8s Inference
-  → Bounding Box Extraction
-  → Coordinate Scaling
-  → CentroidTracker Matching
-  → Queue Zone Classification
-  → Signal Time Calculation
-  → Frame Annotation
-  → Dashboard Display
+  ├─ YOLOv8s Inference              ← vehicle_tracker_ultra.py
+  ├─ Bounding Box Extraction
+  ├─ Coordinate Scaling
+  ├─ CentroidTracker Match           ← IoU + centroid distance
+  ├─ Queue Zone Classification       ← 65% height threshold
+  ├─ Green Time Calculation          ← algo.py
+  ├─ Frame Annotation
+  └─ JPEG → frames/<direction>.jpg  ← polled via /frame/<direction>
 ```
+
+---
 
 ### Queue-Based Signal Timing
 
-The system uses a zone-based queue detection approach:
+A stop line is drawn at **65% of frame height**.
 
-1. A stop line is drawn at 65% of the frame height
-2. Vehicles above the line are counted as queued (waiting)
-3. Vehicles crossing below the line are counted as passed
-4. The direction with the highest queue count receives green priority
-5. Green time is calculated dynamically using the following formula:
+| Zone | Status |
+|---|---|
+| Above stop line | Queued (waiting) |
+| Crossing below | Passed (counted) |
+
+The direction with the **highest queue count** gets green. Duration:
 
 ```
 green_time = base_green + (queue_count × 2.5) + density_bonus
-green_time = clamp(green_time, 10s, 60s)
+green_time = clamp(green_time, 10 s, 60 s)
 ```
 
-### Tracker Algorithm
+---
 
-The custom CentroidTracker uses:
+### CentroidTracker
 
-- **IoU matching** (Intersection over Union) for overlapping bounding boxes
-- **Centroid distance** for non-overlapping re-identification
-- **Greedy cost assignment** sorted by combined IoU and distance cost
-- **Age-based cleanup** — tracks are removed after 8 frames without a detection
+| Mechanism | Purpose |
+|---|---|
+| IoU matching | Pair overlapping boxes across frames |
+| Centroid distance | Re-identify shifted vehicles |
+| Greedy cost sort | Assign tracks by lowest combined cost |
+| Age-based cleanup | Drop tracks missing for 8+ frames |
 
 ---
 
 ## Configuration
 
-All parameters are configurable from the Settings page in the dashboard.
+> All settings live in the **Settings** tab and persist to `settings.json`.
 
-| Category | Parameter | Default | Description |
+| Category | Parameter | Default | Range / Notes |
 |---|---|---|---|
-| Detection | Confidence | 0.25 | Minimum detection confidence threshold |
-| Detection | IoU | 0.45 | Non-maximum suppression threshold |
-| Detection | Image Size | 384 | YOLO inference resolution |
-| Detection | Model | YOLOv8s | Detection model variant |
-| Signal | Base Green | 10 s | Minimum green signal duration |
-| Signal | Max Green | 60 s | Maximum green signal duration |
-| Signal | Yellow Time | 3 s | Yellow signal duration |
-| Signal | All-Red Time | 2 s | Safety clearance interval |
-| Display | Refresh Rate | 500 ms | Frame polling interval |
-| Display | JPEG Quality | 70 | Detection frame output quality |
-| Alerts | Congestion Threshold | 15 | Vehicle count to trigger a congestion alert |
+| **Detection** | Confidence | `0.25` | 0.0 – 1.0 |
+| **Detection** | IoU | `0.45` | NMS overlap threshold |
+| **Detection** | Image Size | `384` | px — higher = slower + more accurate |
+| **Detection** | Model | `YOLOv8s` | n / s / m / x |
+| **Signal** | Base Green | `10 s` | Minimum duration |
+| **Signal** | Max Green | `60 s` | Maximum duration |
+| **Signal** | Yellow Time | `3 s` | Fixed |
+| **Signal** | All-Red Time | `2 s` | Safety clearance |
+| **Display** | Refresh Rate | `500 ms` | Polling interval |
+| **Display** | JPEG Quality | `70` | 1 – 100 |
+| **Alerts** | Congestion Threshold | `15 vehicles` | Triggers alert |
 
 ---
 
 ## API Reference
 
-| Endpoint | Method | Description |
+| Method | Endpoint | Description |
 |---|---|---|
-| `/health` | GET | Server health check |
-| `/upload` | POST | Upload 4 videos and start detection |
-| `/stop` | POST | Stop the active detection process |
-| `/progress` | GET | Live detection progress and metrics |
-| `/frame/<direction>` | GET | Latest detection frame as JPEG |
-| `/analytics/summary` | GET | Historical analytics data |
-| `/system/stats` | GET | System resource statistics |
-| `/settings` | GET | Retrieve current settings |
-| `/settings` | POST | Update settings |
-| `/settings/reset` | POST | Reset settings to defaults |
-| `/system/clear-frames` | POST | Clear cached detection frames |
+| `GET` | `/health` | Server health check |
+| `POST` | `/upload` | Upload 4 videos, start detection |
+| `POST` | `/stop` | Terminate detection subprocess |
+| `GET` | `/progress` | Live metrics — frame, FPS, queues, signals |
+| `GET` | `/frame/<direction>` | Latest JPEG for north / south / east / west |
+| `GET` | `/analytics/summary` | Aggregated session history |
+| `GET` | `/system/stats` | CPU / memory usage |
+| `GET` | `/settings` | Read current config |
+| `POST` | `/settings` | Write config |
+| `POST` | `/settings/reset` | Reset to defaults |
+| `POST` | `/system/clear-frames` | Flush cached frames |
 
-### Example — Fetch Live Progress
+### Sample Response — `/progress`
 
 ```bash
 curl http://localhost:5000/progress
@@ -372,63 +385,77 @@ curl http://localhost:5000/progress
 
 | Metric | Value |
 |---|---|
-| Model | YOLOv8s (22 MB) |
-| Inference Resolution | 384 × 384 |
-| Detection FPS (CPU) | 3 – 5 FPS |
-| Detection FPS (GPU) | 15 – 25 FPS |
-| Directions Processed | All 4 simultaneously |
-| Tracker Latency | < 1 ms per direction |
-| Dashboard Refresh | 500 ms (2 Hz) |
-| Vehicle Classes | 5 (car, truck, bus, motorcycle, bicycle) |
+| Model size | 22 MB |
+| Inference resolution | 384 × 384 px |
+| CPU speed | 3 – 5 FPS |
+| GPU speed | 15 – 25 FPS |
+| Directions processed | 4 simultaneously |
+| Tracker latency | < 1 ms per direction |
+| Dashboard refresh | 500 ms (2 Hz) |
+| Vehicle classes | 5 |
 
 ### Model Comparison
 
-| Model | Size | CPU Speed | Accuracy | Status |
+| Model | Size | CPU FPS | Accuracy | |
 |---|---|---|---|---|
-| YOLOv8n | 6 MB | ~15 FPS | Good | Available |
-| **YOLOv8s** | **22 MB** | **~5 FPS** | **Great** | **Default** |
-| YOLOv8m | 52 MB | ~2 FPS | Excellent | Available |
-| YOLOv8x | 136 MB | ~0.5 FPS | Maximum | Available |
+| YOLOv8n | 6 MB | ~15 | Good | Available |
+| **YOLOv8s** | **22 MB** | **~5** | **Great** | **Default** |
+| YOLOv8m | 52 MB | ~2 | Excellent | Available |
+| YOLOv8x | 136 MB | ~0.5 | Maximum | Available |
 
-To switch models, change the `MODEL` value in the `Cfg` class inside `vehicle_tracker_ultra.py`.
+> To switch: update `MODEL` in the `Cfg` class inside `vehicle_tracker_ultra.py`.
 
 ---
 
 ## Docker Deployment
 
-```bash
-# Build and start both services
-docker-compose up --build
+`docker-compose.yml` defines two services. The frontend waits for the backend health check to pass before starting — no race conditions.
 
-# Access the dashboard at http://localhost:3000
+```bash
+docker-compose up --build
+# Dashboard → http://localhost:3000
 ```
+
+| Service | Container | Port | Notes |
+|---|---|---|---|
+| Backend | `traffic-backend` | `5000` | Health-checked every 30 s |
+| Frontend | `traffic-frontend` | `3000 → 80` | Starts only after backend is healthy |
+
+Uploads persist via volume: `./backend/uploads:/app/uploads`
 
 ---
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-improvement`
-3. Commit your changes: `git commit -m "Add your improvement"`
-4. Push to the branch: `git push origin feature/your-improvement`
-5. Open a Pull Request
+```bash
+# 1. Fork and clone
+git checkout -b feature/your-improvement
 
-Please ensure all changes are tested and existing functionality is not broken before submitting.
+# 2. Make changes, then
+git commit -m "feat: describe your change"
+git push origin feature/your-improvement
+
+# 3. Open a Pull Request
+```
+
+Please test changes against the detection pipeline before submitting.
 
 ---
 
 ## License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for full details.
+Distributed under the **MIT License** — see [`LICENSE`](LICENSE) for details.
 
 ---
 
 <div align="center">
 
-Built for the **Smart India Hackathon (SIH)**
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2c5364,50:203a43,100:0f2027&height=120&section=footer" width="100%"/>
+
+**Built for Smart India Hackathon (SIH)**
 
 *Reducing urban congestion through AI-powered adaptive traffic signals*
 
-If this project was useful to you, consider giving it a star on GitHub.
+[![GitHub](https://img.shields.io/badge/View%20on-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/Shubhamx18/Real-Time-AI-Traffic-Management-System)
 
 </div>
