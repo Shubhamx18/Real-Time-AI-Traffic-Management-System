@@ -1,574 +1,434 @@
-# Terminal 1
-cd S:\shubham\AI-Based-Traffic-Management-SIH-main\AI-Based-Traffic-Management-SIH-main\backend
-venv\Scripts\python run_server.py
+<div align="center">
 
-# Terminal 2
-cd S:\shubham\AI-Based-Traffic-Management-SIH-main\AI-Based-Traffic-Management-SIH-main\frontend
-npm start
+# Real-Time AI Traffic Management System
 
+### Adaptive Signal Control using Computer Vision and Deep Learning
 
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org)
+[![YOLOv8](https://img.shields.io/badge/YOLOv8s-Ultralytics-00FFFF?style=for-the-badge&logo=yolo&logoColor=black)](https://docs.ultralytics.com)
+[![Flask](https://img.shields.io/badge/Flask-3.1-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
+[![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
 
-# AI-Based Traffic Management System
+**An intelligent, real-time traffic signal management system that uses AI-powered vehicle detection to dynamically optimize intersection signal timing — reducing congestion and improving urban traffic flow.**
 
-> Professional traffic control center software with AI-powered vehicle detection, smart priority management, and real-time adaptive signal optimization.
-
-[![Status](https://img.shields.io/badge/Status-Production%20Ready-success)]()
-[![Accuracy](https://img.shields.io/badge/Accuracy-100%25-brightgreen)]()
-[![Python](https://img.shields.io/badge/Python-3.13-blue)]()
-[![React](https://img.shields.io/badge/React-18.x-61DAFB)]()
+[Overview](#overview) · [Features](#features) · [Architecture](#architecture) · [Installation](#installation) · [Usage](#usage) · [API Reference](#api-reference) · [Performance](#performance)
 
 ---
 
-## 📋 Table of Contents
+</div>
 
-- [Features](#-features)
-- [Quick Start](#-quick-start)
-- [System Architecture](#-system-architecture)
-- [Smart Priority Mode](#-smart-priority-mode)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Technical Details](#-technical-details)
-- [Troubleshooting](#-troubleshooting)
+## Overview
+
+Traditional traffic signals operate on fixed timers, completely blind to real-time road conditions. This system replaces that outdated model with an AI-powered adaptive approach that responds dynamically to live traffic data.
+
+**How it works:**
+
+1. Upload 4 intersection videos (North, South, East, West directions)
+2. YOLOv8s detects and tracks every vehicle in real time
+3. Queue analysis determines which direction has the most congestion
+4. Signal timing is dynamically optimized — busier roads get longer green windows
+5. A professional dashboard displays live feeds, analytics, and AI-generated insights
+
+The result: reduced wait times, lower congestion, and smarter intersections.
 
 ---
 
 ## Features
 
-### Core Functionality
-- **100% Accurate Vehicle Counting** - Advanced tracking system with unique ID assignment
-- **YOLOv4 Object Detection** - Detects cars, buses, trucks, and motorbikes with 98%+ accuracy
-- **Smart Priority Mode** - High-traffic roads automatically receive extended green time (+20% bonus)
-- **Genetic Algorithm Optimization** - Minimizes total intersection delay
-- **Professional Control Dashboard** - Real-time monitoring interface styled like actual traffic control centers
-- **Adaptive Signal Management** - Intelligent priority-based traffic light control
+### AI Vehicle Detection
 
-### Smart Priority System
-- **Priority Level 4 (CRITICAL)** - Highest traffic: +20% green time
-- **Priority Level 3 (HIGH)** - Second highest: Normal time
-- **Priority Level 2 (MEDIUM)** - Third: -10% time
-- **Priority Level 1 (LOW)** - Lowest traffic: -20% time
+- **YOLOv8s** deep learning model for fast, accurate detection
+- Recognizes cars, trucks, buses, motorcycles, and bicycles
+- Processes all 4 directions simultaneously every frame
+- Real-time bounding box tracking with centroid-based association
 
-### Visual Features
-- Professional 4-way intersection monitoring display
-- Real-time signal status indicators
-- Live countdown timers (1-second precision)
-- Waiting time tracking for stopped directions
-- Priority level indicators
-- Traffic density visualization bars
-- Cycle counter and statistics
+### Adaptive Signal Control
 
----
+- **Queue-based priority** — the direction with the most vehicles gets green first
+- **Dynamic green time** — ranges from 10s to 60s based on vehicle density and queue length
+- **Density-aware timing** — congested roads receive proportionally longer green signals
+- Automatic signal cycle sequencing: Green → Yellow → Red
 
-## Quick Start
+### AI Analytics Dashboard
 
-### Prerequisites
-- Python 3.13+
-- Node.js 16+
-- npm
+- Live traffic density charts with real-time Recharts visualization
+- AI efficiency score calculated per intersection in real time
+- Queue analysis showing waiting vs. moving vehicles per direction
+- Direction comparison with side-by-side traffic load visualization
+- Smart AI recommendations for congestion alerts and optimization
+- Detection history tracking past sessions with detailed metrics
 
-### Run the System
+### Professional Control Center
 
-**1. Start Backend (Terminal 1):**
-```bash
-cd backend
-venv\Scripts\python run_server.py
-```
-Backend runs on: `http://localhost:5000`
+- 4-panel live intersection feeds with detection overlays
+- Signal timeline visualization showing current and upcoming phases
+- System status monitoring: FPS, progress, and elapsed time
+- Dark-themed, high-density UI designed for traffic control operations
+- Fully browser-based — no external windows or dependencies
 
-**2. Start Frontend (Terminal 2):**
-```bash
-cd frontend
-npm start
-```
-Frontend runs on: `http://localhost:3000`
+### Configurable Settings
 
-**3. Open Browser:**
-```
-http://localhost:3000
-```
-
-**4. Use the System:**
-1. Upload 4 videos (North, South, East, West directions)
-2. Click "Analyze Traffic"
-3. Wait for processing (1-3 minutes)
-4. Choose mode: 🧠 Smart Priority or 📊 Standard
-5. Click "Start Simulation"
-6. Watch adaptive traffic lights in action!
+- Detection parameters: confidence, IoU threshold, image size
+- Signal timing: base green, max green, yellow and red clearance durations
+- Display settings: refresh rate, output quality, themes
+- Alert thresholds: congestion, low traffic, emergency triggers
 
 ---
 
-## System Architecture
+## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    USER (Browser)                            │
-│                 http://localhost:3000                        │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-                         │ Upload 4 videos
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│              FRONTEND (React - Port 3000)                    │
-│  • Professional monitoring dashboard                         │
-│  • 4-way intersection visualization                         │
-│  • Adaptive traffic light simulation                        │
-│  • Smart Priority / Standard mode toggle                    │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-                         │ HTTP POST /upload
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│              BACKEND (Flask - Port 5000)                     │
-│  ┌────────────────────────────────────────────────────┐    │
-│  │ 1. YOLOv4 Vehicle Detection                        │    │
-│  │    • OpenCV 4.13.0                                 │    │
-│  │    • VehicleTracker with unique IDs                │    │
-│  │    • Dual matching (IoU + Distance)                │    │
-│  │    • 100% accurate counting                        │    │
-│  │    Output: [12, 18, 15, 10] vehicles               │    │
-│  └────────────────────────────────────────────────────┘    │
-│  ┌────────────────────────────────────────────────────┐    │
-│  │ 2. Genetic Algorithm Optimization                  │    │
-│  │    • Population: 400, Iterations: 25               │    │
-│  │    • Minimizes total delay                         │    │
-│  │    Output: {north:35s, south:50s, ...}             │    │
-│  └────────────────────────────────────────────────────┘    │
-│  ┌────────────────────────────────────────────────────┐    │
-│  │ 3. Smart Priority Adjustment                       │    │
-│  │    • Ranks directions by vehicle count             │    │
-│  │    • Highest traffic: +20% time                    │    │
-│  │    • Lowest traffic: -20% time                     │    │
-│  │    Output: Optimized timings                       │    │
-│  └────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                      FRONTEND (React 18)                     │
+│                                                              │
+│   Live Control    Upload Footage    Analytics    Settings    │
+│        │                │               │            │       │
+│        └────────────────┴───────────────┴────────────┘       │
+│                              │ HTTP / REST                   │
+├──────────────────────────────┼───────────────────────────────┤
+│                      BACKEND (Flask)                         │
+│                              │                               │
+│         ┌────────────────────┴────────────────────┐          │
+│         │            API Layer (REST)              │          │
+│         │  /upload  /progress  /frame/<direction>  │          │
+│         │  /stop    /settings  /system/stats       │          │
+│         └────────────────────┬────────────────────┘          │
+│                              │                               │
+│         ┌────────────────────┴────────────────────┐          │
+│         │          Detection Subprocess            │          │
+│         │                                          │          │
+│         │   YOLOv8s Engine                         │          │
+│         │        └─> Centroid Tracker              │          │
+│         │                 └─> Queue Signal Timing  │          │
+│         └──────────────────────────────────────────┘          │
+│                                                              │
+│   detection_progress.json    (live metrics)                  │
+│   frames/{north,south,east,west}.jpg   (live feeds)          │
+│   analytics_history.json     (session history)               │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Smart Priority Mode
+## Tech Stack
 
-### How It Works
+| Layer | Technology | Purpose |
+|---|---|---|
+| Frontend | React 18.3 | Single-page dashboard application |
+| Charts | Recharts 3.8 | Real-time traffic density visualization |
+| HTTP Client | Axios | API communication with the backend |
+| Backend | Flask 3.1 | REST API server with CORS support |
+| AI Model | YOLOv8s (Ultralytics) | Real-time vehicle detection |
+| Tracking | Custom CentroidTracker | Multi-object tracking with IoU matching |
+| Computer Vision | OpenCV 4.9+ | Frame processing, drawing, and I/O |
+| Computation | NumPy, SciPy | Matrix operations and cost assignment |
+| Containerization | Docker + Docker Compose | Optional deployment |
 
-**Example Traffic Scenario:**
+---
+
+## Project Structure
+
 ```
-North: 12 vehicles
-South: 25 vehicles ← HIGHEST (Congested!)
-East:  15 vehicles
-West:   8 vehicles
+AI-Based-Traffic-Management-SIH/
+├── README.md
+├── docker-compose.yml
+│
+├── backend/
+│   ├── run_server.py              # Flask API server (main entry point)
+│   ├── run_detection.py           # Detection subprocess launcher
+│   ├── vehicle_tracker_ultra.py   # YOLOv8 + CentroidTracker engine
+│   ├── algo.py                    # Traffic signal optimization algorithm
+│   ├── requirements.txt           # Python dependencies
+│   ├── yolov8s.pt                 # YOLOv8s model weights (~22 MB)
+│   ├── frames/                    # Live detection frame output
+│   ├── uploads/                   # Uploaded video storage
+│   ├── detection_progress.json    # Real-time detection metrics
+│   ├── analytics_history.json     # Historical detection records
+│   └── settings.json              # User-configured settings
+│
+└── frontend/
+    ├── package.json
+    ├── public/
+    │   └── index.html
+    └── src/
+        ├── App.js                 # Main dashboard application
+        ├── Settings.js            # Settings panel component
+        └── styles.css             # Complete UI styling
 ```
-
-**Standard Mode (Equal treatment):**
-```
-North: 35s → Clears ~9 vehicles
-South: 50s → Clears ~16 vehicles (Still congested!)
-East:  42s → Clears ~13 vehicles
-West:  21s → Clears ~7 vehicles
-```
-
-**Smart Priority Mode (Intelligent priority):**
-```
-Priority Ranking:
-1. South (25 veh) → Level 4 🔴 → 60s (+20%) → Clears ~20 vehicles ✅
-2. East  (15 veh) → Level 3 🟡 → 42s (0%)   → Clears ~13 vehicles ✅
-3. North (12 veh) → Level 2 🟢 → 32s (-10%) → Clears ~8 vehicles ✅
-4. West  (8 veh)  → Level 1 🔵 → 17s (-20%) → Clears ~6 vehicles ✅
-
-Phase Order: South → East → North → West (Highest traffic first!)
-```
-
-**Result:** South gets +10 extra seconds to clear congestion!
-
-### Benefits
-- ✅ **+42% Congestion Relief** - High-traffic roads clear faster
-- ✅ **Balanced Waiting Times** - Fair distribution of delays
-- ✅ **Real-world Behavior** - Mimics human traffic controllers
-- ✅ **Maximum Efficiency** - 88% throughput (vs 70% standard)
 
 ---
 
 ## Installation
 
-### Backend Setup
+### Prerequisites
+
+- Python 3.10+ with pip
+- Node.js 18+ with npm
+- Git
+
+### Step 1 — Clone the Repository
 
 ```bash
-# Navigate to backend
+git clone https://github.com/Shubhamx18/Real-Time-AI-Traffic-Management-System.git
+cd Real-Time-AI-Traffic-Management-System
+```
+
+### Step 2 — Set Up the Backend
+
+```bash
 cd backend
 
-# Create virtual environment
+# Create a virtual environment
 python -m venv venv
 
-# Activate virtual environment
-venv\Scripts\activate  # Windows
-source venv/bin/activate  # Linux/Mac
+# Activate the environment
+# Windows:
+venv\Scripts\activate
+# macOS / Linux:
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Verify installation
-python test_backend.py
 ```
 
-**Required Files:**
-- `yolov4-tiny.weights` (24MB)
-- `yolov4-tiny.cfg`
-- `classes.txt`
+> The YOLOv8s model weights (~22 MB) will auto-download on first run.
 
-### Frontend Setup
+### Step 3 — Set Up the Frontend
 
 ```bash
-# Navigate to frontend
-cd frontend
-
-# Install dependencies
+cd ../frontend
 npm install
-
-# Verify installation
-npm run build
 ```
+
+### Step 4 — Start the System
+
+**Terminal 1 — Backend**
+
+```bash
+cd backend
+source venv/bin/activate   # Windows: venv\Scripts\activate
+python run_server.py
+```
+
+> API server starts at `http://localhost:5000`
+
+**Terminal 2 — Frontend**
+
+```bash
+cd frontend
+npm start
+```
+
+> Dashboard opens at `http://localhost:3000`
 
 ---
 
 ## Usage
 
-### 1. Upload Videos
+### 1. Upload Traffic Footage
 
-Upload 4 videos showing traffic from different directions:
-- **North** - Traffic coming from north
-- **South** - Traffic coming from south  
-- **East** - Traffic coming from east
-- **West** - Traffic coming from west
+Go to **Upload Footage** and select 4 video files — one per intersection direction: North, South, East, and West.
 
-**Supported formats:** MP4, AVI, MOV  
-**Recommended:** 30+ seconds each, clear view of vehicles
+> Use traffic surveillance footage where each video captures a single approach lane of the intersection.
 
-### 2. Choose Control Mode
+### 2. Start AI Analysis
 
-**🧠 Smart Priority Mode (Recommended)**
-- Highest traffic roads get priority
-- Dynamic time adjustment (+20% to -20%)
-- Maximum efficiency for unbalanced traffic
-- Real-world adaptive behavior
+Click **Start AI Analysis**. The system will:
 
-**📊 Standard Mode**
-- Equal cycle distribution
-- Pure genetic algorithm results
-- Good for balanced traffic
-- Predictable timing
+- Switch automatically to the Live Control page
+- Display a loading indicator while the AI engine initializes
+- Begin showing live detection feeds with bounding boxes overlaid
+- Update the signal timing panel in real time
 
-### 3. Run Simulation
+### 3. Monitor Live Detection
 
-Click "Start Simulation" to see:
-- Traffic lights change in real-time
-- Green light glowing effects
-- Countdown timers (1-second intervals)
-- Priority badges (🔴🟡🟢🔵)
-- Waiting times for stopped roads
-- Cycle count tracking
+The Live Control dashboard shows:
 
----
+- 4 live feeds with real-time vehicle detection overlays
+- Green signal indicator — which direction currently has right-of-way
+- Queue counts — vehicles waiting at each approach
+- Signal cycle timeline — current and upcoming phases
 
-## Technical Details
+### 4. Review Analytics
 
-### Vehicle Tracking System
+Switch to the **Analytics** tab to access:
 
-**Issues Resolved:**
-- Previous system: Same vehicle counted multiple times (up to 5x)
-- Original accuracy: 27%
-- Root cause: Unstable bounding boxes without persistent tracking
+- Traffic density trends over time
+- AI efficiency scores and congestion indices
+- Queue analysis breakdowns per direction
+- Smart recommendations for signal optimization
+- Full detection history with per-session metrics
 
-**Solution:**
-```python
-class VehicleTracker:
-    - Unique ID assignment (ID:0, ID:1, ...)
-    - Dual matching: IoU (>0.5) + Distance (<100px)
-    - 30-frame persistence buffer
-    - Occlusion handling
-```
+### 5. Stop Analysis
 
-**Result:**
-- Each vehicle counted exactly once
-- 100% accurate counting
-- Stable bounding boxes with ID labels
-
-### Smart Priority Algorithm
-
-```python
-# 1. Rank directions by vehicle count
-priority_order = sorted(directions, key=lambda d: d.count, reverse=True)
-
-# 2. Apply adaptive timing
-if priority_index == 0:  # Highest traffic
-    time = base_time * 1.2  # +20%
-elif priority_index == 1:
-    time = base_time  # No change
-elif priority_index == 2:
-    time = base_time * 0.9  # -10%
-else:  # Lowest traffic
-    time = base_time * 0.8  # -20%
-
-# 3. Cycle in priority order
-Phase 1: Highest traffic direction
-Phase 2: Second highest
-Phase 3: Third
-Phase 4: Lowest
-→ Repeat (Cycle count++)
-```
-
-### Technologies Used
-
-| Component | Technology | Version |
-|-----------|-----------|---------|
-| Frontend | React | 18.x |
-| Backend | Flask | 3.1.2 |
-| AI Model | YOLOv4-tiny | - |
-| CV | OpenCV | 4.13.0 |
-| Optimization | Genetic Algorithm | Custom |
-| Math | NumPy, SciPy | 2.4.1, 1.17.0 |
-
-### Performance Metrics
-
-- **Vehicle Detection:** 25-30 FPS (608x608 input resolution)
-- **Tracking Accuracy:** 100% (unique ID system)
-- **UI Performance:** 60 FPS smooth animations
-- **Memory Usage:** ~150MB total
-- **API Response Time:** < 100ms
+Click **Stop Analytics** at any time to gracefully terminate the detection process and save the session.
 
 ---
 
-## UI Features
+## How It Works
 
-### Dashboard Components
+### Detection Pipeline
 
-**Header:**
-- System status indicator (pulsing animation)
-- Real-time system health
-
-**Left Panel:**
-- Video upload interface
-- File counter (x/4)
-- Mode selector (Smart/Standard)
-- Mode description
-
-**Right Panel:**
-- 4-way intersection visual
-- Animated traffic lights
-- Priority badges
-- Vehicle counts
-- Waiting times
-- Statistics cards
-- Efficiency metrics
-
-### Visual Effects
-
-- **Glowing Lights** - Active green lights pulse
-- **Priority Indicators** - Color-coded badges (🔴🟡🟢🔵)
-- **Waiting Timers** - Red blinking counters (⏱️ 45s)
-- **Density Bars** - Color-coded progress bars
-- **Time Adjustments** - Green (+7s) or red (-3s) indicators
-- **Cycle Counter** - Tracks complete cycles
-
----
-
-## Troubleshooting
-
-### Backend Won't Start
-
-**Issue:** Python not found
-```bash
-# Check Python version
-python --version
-
-# Should be 3.13+
-# If not, install from python.org
+```
+Video Frame
+  → YOLOv8s Inference
+  → Bounding Box Extraction
+  → Coordinate Scaling
+  → CentroidTracker Matching
+  → Queue Zone Classification
+  → Signal Time Calculation
+  → Frame Annotation
+  → Dashboard Display
 ```
 
-**Issue:** Module not found
-```bash
-cd backend
-rmdir /s /q venv
-python -m venv venv
-venv\Scripts\pip install -r requirements.txt
+### Queue-Based Signal Timing
+
+The system uses a zone-based queue detection approach:
+
+1. A stop line is drawn at 65% of the frame height
+2. Vehicles above the line are counted as queued (waiting)
+3. Vehicles crossing below the line are counted as passed
+4. The direction with the highest queue count receives green priority
+5. Green time is calculated dynamically using the following formula:
+
+```
+green_time = base_green + (queue_count × 2.5) + density_bonus
+green_time = clamp(green_time, 10s, 60s)
 ```
 
-### Frontend Won't Start
+### Tracker Algorithm
 
-**Issue:** npm error
-```bash
-cd frontend
-rm -rf node_modules package-lock.json
-npm install
-npm start
-```
+The custom CentroidTracker uses:
 
-### Video Processing Issues
-
-**Issue:** Videos not processing
-- Ensure MP4 format
-- Check video is not corrupted
-- Verify 4 videos uploaded
-- Check backend terminal for errors
-
-### Traffic Lights Not Animating
-
-**Issue:** Simulation not starting
-- Ensure videos analyzed first
-- Check "Start Simulation" clicked
-- Verify browser console for errors
-- Try refreshing page
-
-### Health Check
-
-Test backend is running:
-```bash
-curl http://localhost:5000/health
-```
-
-Expected response:
-```json
-{"status": "OK", "message": "Backend is running"}
-```
+- **IoU matching** (Intersection over Union) for overlapping bounding boxes
+- **Centroid distance** for non-overlapping re-identification
+- **Greedy cost assignment** sorted by combined IoU and distance cost
+- **Age-based cleanup** — tracks are removed after 8 frames without a detection
 
 ---
 
 ## Configuration
 
-### Adjust Priority Sensitivity
+All parameters are configurable from the Settings page in the dashboard.
 
-Edit `frontend/src/App.js`:
-
-```javascript
-// More aggressive priority
-if (priorityIndex === 0) return Math.round(baseTime * 1.3);  // +30%
-if (priorityIndex === 3) return Math.round(baseTime * 0.7);  // -30%
-
-// Less aggressive priority
-if (priorityIndex === 0) return Math.round(baseTime * 1.1);  // +10%
-if (priorityIndex === 3) return Math.round(baseTime * 0.9);  // -10%
-```
-
-### Adjust Detection Confidence
-
-Edit `backend/yolov4.py`:
-
-```python
-# More strict (fewer detections)
-Conf_threshold = 0.5
-
-# More lenient (more detections)
-Conf_threshold = 0.3
-```
+| Category | Parameter | Default | Description |
+|---|---|---|---|
+| Detection | Confidence | 0.25 | Minimum detection confidence threshold |
+| Detection | IoU | 0.45 | Non-maximum suppression threshold |
+| Detection | Image Size | 384 | YOLO inference resolution |
+| Detection | Model | YOLOv8s | Detection model variant |
+| Signal | Base Green | 10 s | Minimum green signal duration |
+| Signal | Max Green | 60 s | Maximum green signal duration |
+| Signal | Yellow Time | 3 s | Yellow signal duration |
+| Signal | All-Red Time | 2 s | Safety clearance interval |
+| Display | Refresh Rate | 500 ms | Frame polling interval |
+| Display | JPEG Quality | 70 | Detection frame output quality |
+| Alerts | Congestion Threshold | 15 | Vehicle count to trigger a congestion alert |
 
 ---
 
-## Best Practices
+## API Reference
 
-### For Maximum Accuracy
-- Use high-quality videos (720p+)
-- Ensure clear view of vehicles
-- Good lighting conditions
-- Minimal camera shake
-- 30-60 seconds per video
+| Endpoint | Method | Description |
+|---|---|---|
+| `/health` | GET | Server health check |
+| `/upload` | POST | Upload 4 videos and start detection |
+| `/stop` | POST | Stop the active detection process |
+| `/progress` | GET | Live detection progress and metrics |
+| `/frame/<direction>` | GET | Latest detection frame as JPEG |
+| `/analytics/summary` | GET | Historical analytics data |
+| `/system/stats` | GET | System resource statistics |
+| `/settings` | GET | Retrieve current settings |
+| `/settings` | POST | Update settings |
+| `/settings/reset` | POST | Reset settings to defaults |
+| `/system/clear-frames` | POST | Clear cached detection frames |
 
-### For Best Performance
-- Close unnecessary applications
-- Use modern browser (Chrome/Firefox)
-- Ensure stable internet connection
-- Don't refresh during processing
+### Example — Fetch Live Progress
 
-### For Smart Mode
-- Use when traffic is unbalanced
-- Good for rush hour scenarios
-- One direction heavily congested
-- Dynamic traffic patterns
+```bash
+curl http://localhost:5000/progress
+```
 
-### For Standard Mode
-- Use for balanced traffic
-- Testing/validation purposes
-- Research and analysis
-- Predictable timing needs
-
----
-
-## Deployment
-
-### Production Checklist
-
-- [ ] Use production WSGI server (Gunicorn)
-- [ ] Enable HTTPS
-- [ ] Set environment variables
-- [ ] Configure CORS properly
-- [ ] Set up logging
-- [ ] Add authentication
-- [ ] Monitor performance
-- [ ] Set up backups
-
-### Docker Deployment (Optional)
-
-```dockerfile
-# Backend Dockerfile
-FROM python:3.13
-WORKDIR /app
-COPY backend/requirements.txt .
-RUN pip install -r requirements.txt
-COPY backend/ .
-CMD ["python", "run_server.py"]
+```json
+{
+  "status": "detecting",
+  "frame": 150,
+  "total_frames": 3000,
+  "progress": 5.0,
+  "fps": 3.9,
+  "directions": {
+    "north": { "queue_count": 8,  "vehicles_on_road": 12, "green_time": 30 },
+    "south": { "queue_count": 3,  "vehicles_on_road": 5,  "green_time": 18 },
+    "east":  { "queue_count": 10, "vehicles_on_road": 15, "green_time": 35 },
+    "west":  { "queue_count": 2,  "vehicles_on_road": 4,  "green_time": 15 }
+  }
+}
 ```
 
 ---
 
-## License
+## Performance
 
-This project is developed for Smart India Hackathon (SIH).
+| Metric | Value |
+|---|---|
+| Model | YOLOv8s (22 MB) |
+| Inference Resolution | 384 × 384 |
+| Detection FPS (CPU) | 3 – 5 FPS |
+| Detection FPS (GPU) | 15 – 25 FPS |
+| Directions Processed | All 4 simultaneously |
+| Tracker Latency | < 1 ms per direction |
+| Dashboard Refresh | 500 ms (2 Hz) |
+| Vehicle Classes | 5 (car, truck, bus, motorcycle, bicycle) |
+
+### Model Comparison
+
+| Model | Size | CPU Speed | Accuracy | Status |
+|---|---|---|---|---|
+| YOLOv8n | 6 MB | ~15 FPS | Good | Available |
+| **YOLOv8s** | **22 MB** | **~5 FPS** | **Great** | **Default** |
+| YOLOv8m | 52 MB | ~2 FPS | Excellent | Available |
+| YOLOv8x | 136 MB | ~0.5 FPS | Maximum | Available |
+
+To switch models, change the `MODEL` value in the `Cfg` class inside `vehicle_tracker_ultra.py`.
+
+---
+
+## Docker Deployment
+
+```bash
+# Build and start both services
+docker-compose up --build
+
+# Access the dashboard at http://localhost:3000
+```
 
 ---
 
 ## Contributing
 
-Contributions welcome! Areas for improvement:
-- Machine learning for pattern prediction
-- Multi-intersection coordination
-- Emergency vehicle priority
-- Pedestrian crossing integration
-- Mobile app development
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-improvement`
+3. Commit your changes: `git commit -m "Add your improvement"`
+4. Push to the branch: `git push origin feature/your-improvement`
+5. Open a Pull Request
+
+Please ensure all changes are tested and existing functionality is not broken before submitting.
 
 ---
 
-## Support
+## License
 
-**System Status:** Production Ready  
-**Version:** 2.0  
-**Last Updated:** January 2024
-
-**Quick Commands:**
-```bash
-# Start backend
-cd backend && venv\Scripts\python run_server.py
-
-# Start frontend
-cd frontend && npm start
-
-# Test system
-cd backend && venv\Scripts\python test_backend.py
-
-# Check health
-curl http://localhost:5000/health
-```
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for full details.
 
 ---
 
-## Key Achievements
+<div align="center">
 
-- **100% Vehicle Tracking Accuracy** - Eliminated duplicate counting with unique ID system
-- **Smart Priority System** - Intelligent priority-based signal management
-- **Professional Control Center UI** - Serious, data-driven interface design
-- **Real-time Adaptive Control** - Live traffic signal optimization
-- **Production Ready** - Enterprise-grade deployable solution
-- **Comprehensive Documentation** - Complete setup and usage guide
+Built for the **Smart India Hackathon (SIH)**
 
----
+*Reducing urban congestion through AI-powered adaptive traffic signals*
 
-**Professional Traffic Management for Modern Cities**
+If this project was useful to you, consider giving it a star on GitHub.
 
----
-
-**Developed for Smart India Hackathon - Advanced Traffic Management Solution**
+</div>
