@@ -1,0 +1,8 @@
+venv/
+__pycache__/
+*.pyc
+.git
+.env
+uploads/*.mp4
+yolov8x.pt
+detection_progress.json
